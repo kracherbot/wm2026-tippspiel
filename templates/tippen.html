@@ -1,0 +1,110 @@
+{{template "header" .}}
+<div class="fade-in">
+    <h1 class="text-2xl font-bold text-white mb-6">⚽ Tippen</h1>
+
+    {{if .PhaseOrder}}
+    <!-- Tab Navigation -->
+    <div class="flex flex-wrap gap-1 mb-6 border-b border-slate-700 pb-1" id="tab-nav">
+        {{range $i, $phase := .PhaseOrder}}
+        <button onclick="switchTab('tab-{{$i}}', this)" class="tab-btn px-3 py-2 text-sm rounded-t-lg transition font-medium {{if eq $i 0}}bg-slate-700/60 text-white border-b-2 border-emerald-500{{else}}text-slate-400 hover:text-slate-200 hover:bg-slate-700/30{{end}}">
+            {{$phase}}
+        </button>
+        {{end}}
+    </div>
+
+    <!-- Tab Content -->
+    {{range $i, $phase := .PhaseOrder}}
+    <div id="tab-{{$i}}" class="tab-content mb-8 {{if ne $i 0}}hidden{{end}}">
+        <div class="space-y-3">
+            {{range index $.ByPhase $phase}}
+            <form method="POST" action="/tippen/save" class="glass-card p-4">
+                <input type="hidden" name="match_id" value="{{.Match.ID}}">
+                <div class="flex flex-col sm:flex-row items-center gap-3">
+                    <div class="flex-1 text-right sm:text-right">
+                        <span class="font-semibold text-white">{{.Match.HomeTeam}}</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input type="number" name="home_goals" min="0" max="20" value="{{if .HasTip}}{{.TipHome}}{{end}}" 
+                            {{if not .CanTip}}disabled{{end}}
+                            class="w-16 text-center rounded-xl px-2 py-1 text-lg font-bold focus:ring-2 focus:ring-emerald-500 {{if not .CanTip}}opacity-50{{end}}">
+                        <span class="text-slate-500 font-bold text-lg">:</span>
+                        <input type="number" name="away_goals" min="0" max="20" value="{{if .HasTip}}{{.TipAway}}{{end}}" 
+                            {{if not .CanTip}}disabled{{end}}
+                            class="w-16 text-center rounded-xl px-2 py-1 text-lg font-bold focus:ring-2 focus:ring-emerald-500 {{if not .CanTip}}opacity-50{{end}}">
+                    </div>
+                    <div class="flex-1 text-left sm:text-left">
+                        <span class="font-semibold text-white">{{.Match.AwayTeam}}</span>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between mt-2 text-xs">
+                    <span class="text-slate-300 font-medium">{{formatTime .Match.MatchDate}}</span>
+                    <div>
+                        {{if .Match.Finished}}
+                            <span class="text-emerald-400 font-medium">Ergebnis: {{.Match.HomeGoals.Int64}}:{{.Match.AwayGoals.Int64}}</span>
+                        {{else if .CanTip}}
+                            <button type="submit" class="bg-emerald-600 text-white px-3 py-1 rounded-lg text-xs hover:bg-emerald-500 transition shadow-lg shadow-emerald-900/30">
+                                {{if .HasTip}}Tipp ändern{{else}}Tipp abgeben{{end}}
+                            </button>
+                        {{else}}
+                            <span class="text-amber-500">Frist abgelaufen</span>
+                        {{end}}
+                        <a href="/match/{{.Match.ID}}" class="ml-2 text-slate-400 hover:text-emerald-400 transition relative">
+                            💬
+                            {{if gt .CommentCount 0}}
+                            <span class="absolute -top-2 -right-3 bg-emerald-500 text-white text-[10px] font-bold rounded-full min-w-[16px] h-4 flex items-center justify-center px-1 shadow">
+                                {{.CommentCount}}
+                            </span>
+                            {{end}}
+                        </a>
+                    </div>
+                </div>
+            </form>
+            {{end}}
+        </div>
+    </div>
+    {{end}}
+    {{end}}
+</div>
+
+<script>
+function switchTab(tabId, btn) {
+    // Hide all tabs
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+    // Show selected
+    document.getElementById(tabId).classList.remove('hidden');
+    // Update button styles
+    document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('bg-slate-700/60', 'text-white', 'border-b-2', 'border-emerald-500');
+        b.classList.add('text-slate-400', 'hover:text-slate-200', 'hover:bg-slate-700/30');
+    });
+    btn.classList.remove('text-slate-400', 'hover:text-slate-200', 'hover:bg-slate-700/30');
+    btn.classList.add('bg-slate-700/60', 'text-white', 'border-b-2', 'border-emerald-500');
+}
+
+// Remember last active tab in sessionStorage
+document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+    btn.addEventListener('click', function() {
+        sessionStorage.setItem('tippenActiveTab', 'tab-' + i);
+    });
+});
+window.addEventListener('DOMContentLoaded', function() {
+    const saved = sessionStorage.getItem('tippenActiveTab');
+    if (saved) {
+        const el = document.getElementById(saved);
+        if (el) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+            el.classList.remove('hidden');
+            const idx = saved.replace('tab-', '');
+            document.querySelectorAll('.tab-btn').forEach((b, i) => {
+                b.classList.remove('bg-slate-700/60', 'text-white', 'border-b-2', 'border-emerald-500');
+                b.classList.add('text-slate-400', 'hover:text-slate-200', 'hover:bg-slate-700/30');
+                if (i == idx) {
+                    b.classList.remove('text-slate-400', 'hover:text-slate-200', 'hover:bg-slate-700/30');
+                    b.classList.add('bg-slate-700/60', 'text-white', 'border-b-2', 'border-emerald-500');
+                }
+            });
+        }
+    }
+});
+</script>
+{{template "footer" .}}

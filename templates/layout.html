@@ -1,0 +1,185 @@
+{{define "header"}}<!DOCTYPE html>
+<html lang="de" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{if .Title}}{{.Title}} – {{end}}WM 2026 Tippspiel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a1628;
+            background-image: url('/static/Hintergrund.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            color: #e2e8f0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                background-image: url('/static/mobile_hintergrund.png');
+            }
+        }
+
+        /* Dark overlay for readability */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(10, 22, 40, 0.55);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body > * { position: relative; z-index: 1; }
+
+        .glass {
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 1rem;
+        }
+
+        .glass-nav {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .gold-text {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gold-glow {
+            text-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.4s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        input[type="number"], input[type="text"], input[type="email"], input[type="password"] {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #1e293b;
+        }
+        input:focus {
+            border-color: rgba(16, 185, 129, 0.7);
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.15);
+            background: #ffffff;
+        }
+        input::placeholder {
+            color: #94a3b8;
+        }
+        input:disabled {
+            background: rgba(255, 255, 255, 0.4);
+            color: #475569;
+        }
+
+        table th { color: #e2e8f0; }
+        table td { color: #cbd5e1; border-color: rgba(255,255,255,0.05); }
+        table tbody tr:hover { background: rgba(255,255,255,0.03); }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.5); }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+        /* Flag parade */
+        .flag-parade {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            font-size: 1.8rem;
+            letter-spacing: 0.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+            opacity: 0.06;
+            line-height: 1;
+            padding: 0.5rem 0;
+            animation: flagScroll 60s linear infinite;
+            pointer-events: none;
+            user-select: none;
+        }
+        .flag-parade:nth-child(1) { top: 0; animation-duration: 60s; }
+        @keyframes flagScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+    </style>
+</head>
+<body class="min-h-full">
+    {{if .User}}
+    <nav class="glass-nav sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4">
+            <div class="flex items-center justify-between h-14">
+                <a href="/dashboard" class="text-white font-bold text-lg flex items-center gap-2">
+                    <span class="text-xl">⚽</span>
+                    <span class="gold-text">WM 2026</span>
+                </a>
+                <div class="flex items-center space-x-1 sm:space-x-3">
+                    <a href="/tippen" class="text-slate-300 hover:text-white px-2 py-1 text-sm sm:text-base rounded transition">Tippen</a>
+                    <a href="/ranking" class="text-slate-300 hover:text-white px-2 py-1 text-sm sm:text-base rounded transition">Tabelle</a>
+                    <a href="/regeln" class="text-slate-300 hover:text-white px-2 py-1 text-sm sm:text-base rounded transition">Regeln</a>
+                    {{if .User.IsAdmin}}
+                    <a href="/admin" class="text-amber-400 hover:text-amber-300 px-2 py-1 text-sm sm:text-base rounded transition">Admin</a>
+                    {{end}}
+                    <span class="text-slate-400 text-xs sm:text-sm hidden sm:inline">{{.User.DisplayName}}</span>
+                    <a href="/password" class="text-slate-400 hover:text-slate-200 text-sm transition">Passwort</a>
+                    <a href="/logout" class="text-slate-400 hover:text-red-400 text-sm transition">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    {{end}}
+
+    {{if .FlashMessage}}
+    <div class="max-w-5xl mx-auto px-4 mt-4 fade-in">
+        <div class="p-3 rounded-lg {{if eq .FlashType "error"}}bg-red-900/50 border border-red-500/30 text-red-300{{else if eq .FlashType "success"}}bg-emerald-900/50 border border-emerald-500/30 text-emerald-300{{else}}bg-blue-900/50 border border-blue-500/30 text-blue-300{{end}}">
+            {{.FlashMessage}}
+        </div>
+    </div>
+    {{end}}
+
+    <main class="max-w-5xl mx-auto px-4 py-6">
+{{end}}
+
+{{define "footer"}}
+    </main>
+    <footer class="text-center text-slate-500 text-xs py-6">
+        WM 2026 Tippspiel · wm2026.walsi.org ⚽
+    </footer>
+</body>
+</html>
+{{end}}

@@ -1,0 +1,169 @@
+/* WM 2026 Tippspiel */
+
+:root {
+    --panel-bg: rgba(255, 255, 255, 0.9);
+    --panel-border: rgba(255, 255, 255, 0.2);
+    --text-soft: rgba(255, 255, 255, 0.82);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    min-height: 100%;
+}
+
+body {
+    position: relative;
+    background: #071a33;
+    color: #e5eef9;
+}
+
+.site-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.site-home .site-backdrop {
+    background-image:
+        linear-gradient(180deg, rgba(4, 16, 34, 0.35), rgba(4, 16, 34, 0.82)),
+        url('/static/images/Hintergrund.png');
+}
+
+.site-auth .site-backdrop {
+    background-image:
+        linear-gradient(180deg, rgba(4, 16, 34, 0.3), rgba(4, 16, 34, 0.82)),
+        url('/static/images/Basis_Bild.png');
+}
+
+.site-app .site-backdrop {
+    background-image:
+        linear-gradient(180deg, rgba(4, 16, 34, 0.42), rgba(4, 16, 34, 0.88)),
+        url('/static/images/Hintergrund.png');
+}
+
+.site-nav {
+    position: relative;
+    z-index: 10;
+    background: linear-gradient(90deg, rgba(6, 78, 59, 0.88), rgba(4, 120, 87, 0.78));
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+.hero-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1.5rem;
+    min-height: 32rem;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    background-image:
+        linear-gradient(90deg, rgba(4, 16, 34, 0.8) 0%, rgba(4, 16, 34, 0.58) 42%, rgba(4, 16, 34, 0.18) 100%),
+        url('/static/images/Hero_Banner.png');
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.32);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.hero-content {
+    max-width: 34rem;
+}
+
+.hero-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    color: white;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    backdrop-filter: blur(8px);
+}
+
+.glass-panel {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+}
+
+.surface-card {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
+    backdrop-filter: blur(10px);
+}
+
+.site-app .surface-card,
+.site-auth .surface-card {
+    background: rgba(255, 255, 255, 0.92);
+}
+
+.page-title,
+.content-title {
+    color: white;
+    text-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+}
+
+.muted-on-dark {
+    color: var(--text-soft);
+}
+
+.auth-shell {
+    max-width: 32rem;
+    margin: 0 auto;
+}
+
+.auth-card {
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 1.25rem;
+    padding: 2rem;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+    backdrop-filter: blur(12px);
+}
+
+.auth-intro {
+    color: rgba(255, 255, 255, 0.88);
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.stats-chip {
+    min-width: 8rem;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+    .hero-banner {
+        min-height: 38rem;
+        background-image:
+            linear-gradient(180deg, rgba(4, 16, 34, 0.45) 0%, rgba(4, 16, 34, 0.7) 44%, rgba(4, 16, 34, 0.9) 100%),
+            url('/static/images/mobile_hintergrund.png');
+        background-position: center top;
+        padding: 1.5rem;
+        align-items: flex-end;
+    }
+
+    .stats-chip {
+        min-width: unset;
+        width: 100%;
+    }
+}

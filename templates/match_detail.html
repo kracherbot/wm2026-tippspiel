@@ -1,0 +1,45 @@
+{{template "header" .}}
+<div class="fade-in">
+    <h1 class="text-2xl font-bold text-white mb-2">{{.Match.HomeTeam}} vs {{.Match.AwayTeam}}</h1>
+    <p class="muted-on-dark mb-6">{{.Match.Phase}} {{if .Match.GroupName}}· Gruppe {{.Match.GroupName}}{{end}} · {{formatTime .Match.MatchDate}}</p>
+    
+    {{if .Match.Finished}}
+    <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-4 mb-6 text-center">
+        <div class="text-2xl font-bold text-emerald-700">
+            {{if .Match.HomeGoals.Valid}}{{.Match.HomeGoals.Int64}}{{else}}-{{end}} : {{if .Match.AwayGoals.Valid}}{{.Match.AwayGoals.Int64}}{{else}}-{{end}}
+        </div>
+        <div class="text-sm text-emerald-600">Endergebnis</div>
+    </div>
+    {{end}}
+
+    <div class="glass-card p-4 mb-6">
+        <h2 class="text-lg font-semibold text-slate-300 mb-3">💬 Kommentare ({{len .Comments}})</h2>
+        
+        <form method="POST" action="/comment/add" class="mb-4">
+            <input type="hidden" name="match_id" value="{{.Match.ID}}">
+            <div class="flex gap-2">
+                <input type="text" name="text" required placeholder="Dein Kommentar..." class="flex-1 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500">
+                <button type="submit" class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition">Senden</button>
+            </div>
+        </form>
+        
+        {{if .Comments}}
+        <div class="space-y-3">
+            {{range .Comments}}
+            <div class="border-b pb-3 last:border-0">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="font-medium text-white text-sm">{{.UserName}}</span>
+                    <span class="text-slate-500 text-xs">{{formatTimeFull .CreatedAt}}</span>
+                </div>
+                <p class="text-slate-400 text-sm">{{.Text}}</p>
+            </div>
+            {{end}}
+        </div>
+        {{else}}
+        <p class="text-slate-500 text-sm">Noch keine Kommentare. Sei der Erste!</p>
+        {{end}}
+    </div>
+    
+    <a href="/tippen" class="text-emerald-600 hover:underline">← Zurück zum Tippen</a>
+</div>
+{{template "footer" .}}
