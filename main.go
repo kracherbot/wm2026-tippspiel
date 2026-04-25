@@ -49,13 +49,13 @@ func main() {
 	config := &AppConfig{
 		Port:       getEnv("PORT", "8080"),
 		DBPath:     getEnv("DB_PATH", "/data/tippspiel.db"),
-		SMTPHost:   getEnv("SMTP_HOST", "mail.walsi.org"),
+		SMTPHost:   getEnv("SMTP_HOST", ""),
 		SMTPPort:   getEnv("SMTP_PORT", "587"),
 		SMTPUser:   getEnv("SMTP_USER", ""),
 		SMTPPass:   getEnv("SMTP_PASS", ""),
-		AdminEmail: getEnv("ADMIN_EMAIL", "admin.wm2026@walsi.org"),
-		BaseURL:    getEnv("BASE_URL", "https://wm2026.walsi.org"),
-		JWTSecret:  getEnv("JWT_SECRET", "wm2026-tippspiel-secret-change-me"),
+		AdminEmail: getEnv("ADMIN_EMAIL", "admin@example.com"),
+		BaseURL:    getEnv("BASE_URL", "http://localhost:8080"),
+		JWTSecret:  getEnv("JWT_SECRET", "change-me-to-a-random-secret"),
 	}
 
 	db, err := sql.Open("sqlite3", config.DBPath+"?_loc=UTC&_journal_mode=WAL&_foreign_keys=on")
@@ -139,7 +139,7 @@ func (a *App) ensureAdmin() {
 	var count int
 	a.db.QueryRow("SELECT COUNT(*) FROM users WHERE is_admin = 1").Scan(&count)
 	if count == 0 {
-		hash, _ := bcrypt.GenerateFromPassword([]byte("admin2026"), bcrypt.DefaultCost)
+		hash, _ := bcrypt.GenerateFromPassword([]byte(getEnv("ADMIN_PASSWORD", "admin")), bcrypt.DefaultCost)
 		token := generateToken()
 		a.db.Exec(
 			"INSERT INTO users (email, password_hash, display_name, is_admin, is_verified, verify_token) VALUES (?, ?, ?, 1, 1, ?)",

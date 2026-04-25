@@ -24,6 +24,6 @@ docker compose up -d --build
 
 ## Admin
 
-Standard-Admin: `admin.wm2026@walsi.org` / `admin2026`
+Standard-Admin: `admin@example.com` / `admin` (Passwort via ADMIN_PASSWORD env konfigurierbar)
 
 Passwort nach erstem Login ändern!

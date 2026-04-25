@@ -10,12 +10,13 @@ services:
     environment:
       - PORT=8080
       - DB_PATH=/data/tippspiel.db
-      - SMTP_HOST=mail.walsi.org
+      - SMTP_HOST=mail.
       - SMTP_PORT=587
-      - SMTP_USER=admin.wm2026@walsi.org
+      - SMTP_USER=admin@example.com
       - SMTP_PASS=jPlQ5cLHdKwdWuk4d
-      - ADMIN_EMAIL=admin.wm2026@walsi.org
-      - BASE_URL=https://wm2026.walsi.org
+      - ADMIN_EMAIL=admin@example.com
+      - ADMIN_PASSWORD=admin
+      - BASE_URL=https://localhost:8080
       - JWT_SECRET=wm2026-tippspiel-prod-8f2k9mXp4qR7sT1v
 
 volumes:
