@@ -1,0 +1,29 @@
+services:
+  tippspiel:
+    build: .
+    container_name: wm2026-tippspiel
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - tippspiel-data:/data
+    environment:
+      - PORT=8080
+      - DB_PATH=/data/tippspiel.db
+      - SMTP_HOST=mail.walsi.org
+      - SMTP_PORT=587
+      - SMTP_USER=admin.wm2026@walsi.org
+      - SMTP_PASS=jPlQ5cLHdKwdWuk4d
+      - ADMIN_EMAIL=admin.wm2026@walsi.org
+      - ADMIN_PASSWORD=admin
+      - BASE_URL=https://wm2026.walsi.org
+      - JWT_SECRET=911911
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  tippspiel-data:
