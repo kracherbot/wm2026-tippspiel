@@ -32,19 +32,19 @@ body {
 .site-home .site-backdrop {
     background-image:
         linear-gradient(180deg, rgba(4, 16, 34, 0.35), rgba(4, 16, 34, 0.82)),
-        url('/static/images/Hintergrund.png');
+        url('/static/Hintergrund.png');
 }
 
 .site-auth .site-backdrop {
     background-image:
         linear-gradient(180deg, rgba(4, 16, 34, 0.3), rgba(4, 16, 34, 0.82)),
-        url('/static/images/Basis_Bild.png');
+        url('/static/Basis_Bild.png');
 }
 
 .site-app .site-backdrop {
     background-image:
         linear-gradient(180deg, rgba(4, 16, 34, 0.42), rgba(4, 16, 34, 0.88)),
-        url('/static/images/Hintergrund.png');
+        url('/static/Hintergrund.png');
 }
 
 .site-nav {
@@ -69,7 +69,7 @@ body {
     align-items: center;
     background-image:
         linear-gradient(90deg, rgba(4, 16, 34, 0.8) 0%, rgba(4, 16, 34, 0.58) 42%, rgba(4, 16, 34, 0.18) 100%),
-        url('/static/images/Hero_Banner.png');
+        url('/static/Hero_Banner.png');
     background-size: cover;
     background-position: center;
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.32);
@@ -156,7 +156,7 @@ body {
         min-height: 38rem;
         background-image:
             linear-gradient(180deg, rgba(4, 16, 34, 0.45) 0%, rgba(4, 16, 34, 0.7) 44%, rgba(4, 16, 34, 0.9) 100%),
-            url('/static/images/mobile_hintergrund.png');
+            url('/static/mobile_hintergrund.png');
         background-position: center top;
         padding: 1.5rem;
         align-items: flex-end;
