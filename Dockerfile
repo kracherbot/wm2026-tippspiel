@@ -11,11 +11,7 @@ RUN go mod tidy && CGO_ENABLED=1 GOOS=linux go build -o tippspiel .
 
 FROM debian:bookworm-slim
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates \
-    libsqlite3-0 \
-    tzdata \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends     ca-certificates     libsqlite3-0     tzdata     wget     sqlite3     && rm -rf /var/lib/apt/lists/*
 
 ENV TZ=Europe/Zurich
 

@@ -38,7 +38,7 @@ func (a *App) handleDashboard(w http.ResponseWriter, r *http.Request) {
 		SELECT COUNT(*) + 1 FROM (
 			SELECT u.id, COALESCE(SUM(CASE
 				WHEN t.home_goals = m.home_goals AND t.away_goals = m.away_goals THEN 3
-				WHEN (t.home_goals - t.away_goals) = (m.home_goals - m.away_goals) THEN 1
+				WHEN ((t.home_goals > t.away_goals AND m.home_goals > m.away_goals) OR (t.home_goals < t.away_goals AND m.home_goals < m.away_goals) OR (t.home_goals = t.away_goals AND m.home_goals = m.away_goals)) THEN 1
 				ELSE 0
 			END), 0) as pts
 			FROM users u
@@ -49,7 +49,7 @@ func (a *App) handleDashboard(w http.ResponseWriter, r *http.Request) {
 		) sub WHERE pts > (
 			SELECT COALESCE(SUM(CASE
 				WHEN t.home_goals = m.home_goals AND t.away_goals = m.away_goals THEN 3
-				WHEN (t.home_goals - t.away_goals) = (m.home_goals - m.away_goals) THEN 1
+				WHEN ((t.home_goals > t.away_goals AND m.home_goals > m.away_goals) OR (t.home_goals < t.away_goals AND m.home_goals < m.away_goals) OR (t.home_goals = t.away_goals AND m.home_goals = m.away_goals)) THEN 1
 				ELSE 0
 			END), 0)
 			FROM tips t
@@ -166,7 +166,7 @@ func (a *App) handleRanking(w http.ResponseWriter, r *http.Request) {
 	rows, err := a.db.Query(`
 		SELECT u.display_name,
 			SUM(CASE WHEN t.home_goals = m.home_goals AND t.away_goals = m.away_goals THEN 1 ELSE 0 END) as exact,
-			SUM(CASE WHEN (t.home_goals - t.away_goals) = (m.home_goals - m.away_goals)
+			SUM(CASE WHEN ((t.home_goals > t.away_goals AND m.home_goals > m.away_goals) OR (t.home_goals < t.away_goals AND m.home_goals < m.away_goals) OR (t.home_goals = t.away_goals AND m.home_goals = m.away_goals))
 				AND NOT (t.home_goals = m.home_goals AND t.away_goals = m.away_goals) THEN 1 ELSE 0 END) as diff
 		FROM users u
 		LEFT JOIN tips t ON t.user_id = u.id

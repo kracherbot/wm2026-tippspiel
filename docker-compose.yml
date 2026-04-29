@@ -18,6 +18,12 @@ services:
       - ADMIN_PASSWORD=admin
       - BASE_URL=https://localhost:8080
       - JWT_SECRET=change-me-to-a-random-secret
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
 volumes:
   tippspiel-data:

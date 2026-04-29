@@ -91,7 +91,10 @@ func (t *Tip) Points() (total, exact, diff int) {
 	if t.HomeGoals == hg && t.AwayGoals == ag {
 		return 3, 1, 0
 	}
-	if (t.HomeGoals - t.AwayGoals) == (hg - ag) {
+	// Richtiger Sieger oder Unentschieden (nicht exakt)
+	tipDiff := t.HomeGoals - t.AwayGoals
+	matchDiff := hg - ag
+	if (tipDiff > 0 && matchDiff > 0) || (tipDiff < 0 && matchDiff < 0) || (tipDiff == 0 && matchDiff == 0) {
 		return 1, 0, 1
 	}
 	return 0, 0, 0
