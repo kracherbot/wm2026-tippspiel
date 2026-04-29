@@ -18,6 +18,8 @@ ENV TZ=Europe/Zurich
 WORKDIR /app
 
 COPY --from=builder /app/tippspiel .
+COPY --from=builder /app/static/ ./static/
+COPY --from=builder /app/templates/ ./templates/
 
 RUN mkdir -p /data
 
