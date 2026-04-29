@@ -20,6 +20,7 @@ import (
 var templateFS embed.FS
 
 //go:embed static/*
+//go:embed static/images/*
 var staticFS embed.FS
 
 type contextKey string
