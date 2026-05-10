@@ -1,0 +1,37 @@
+{{template "header" .}}
+<div class="auth-shell fade-in py-6 sm:py-12">
+    <p class="auth-intro">Mach mit und tritt im WM 2026 Tippspiel gegen dein Team an.</p>
+    <div class="auth-card">
+        <h1 class="text-2xl font-bold text-white mb-6">Registrieren</h1>
+        
+        {{if .Error}}
+        <div class="bg-red-100 text-red-700 p-3 rounded-lg mb-4">{{.Error}}</div>
+        {{end}}
+        {{if .Success}}
+        <div class="bg-green-100 text-green-700 p-3 rounded-lg mb-4">{{.Success}}</div>
+        {{end}}
+        
+        <form method="POST" action="/register" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-1">Anzeigename</label>
+                <input type="text" name="display_name" value="{{.Name}}" required class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" placeholder="Dein Name">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-1">E-Mail</label>
+                <input type="email" name="email" value="{{.Email}}" required class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-1">Passwort</label>
+                <input type="password" name="password" required minlength="6" class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-1">Passwort bestätigen</label>
+                <input type="password" name="password_confirm" required minlength="6" class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+            </div>
+            <button type="submit" class="w-full bg-emerald-600 text-white py-2 rounded-lg hover:bg-emerald-700 transition font-medium">Registrieren</button>
+        </form>
+        
+        <p class="text-center text-slate-400 text-sm mt-4">Schon ein Konto? <a href="/login" class="text-emerald-400 hover:underline">Anmelden</a></p>
+    </div>
+</div>
+{{template "footer" .}}

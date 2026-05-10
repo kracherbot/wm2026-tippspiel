@@ -1,0 +1,86 @@
+{{template "header" .}}
+<div class="fade-in">
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-bold text-white">🏆 Ergebnisse eintragen</h1>
+        <a href="/admin" class="text-emerald-400 hover:text-emerald-300 text-sm">← Zurück</a>
+    </div>
+
+    {{if .PhaseOrder}}
+    <!-- Tab Navigation -->
+    <div class="flex flex-wrap gap-1 mb-6 border-b border-slate-700 pb-1" id="results-tab-nav">
+        {{range $i, $phase := .PhaseOrder}}
+        <button onclick="switchResultsTab('results-tab-{{$i}}', this)" class="results-tab-btn px-3 py-2 text-sm rounded-t-lg transition font-medium {{if eq $i 0}}bg-slate-700/60 text-white border-b-2 border-emerald-500{{else}}text-slate-400 hover:text-slate-200 hover:bg-slate-700/30{{end}}">
+            {{$phase}}
+        </button>
+        {{end}}
+    </div>
+
+    <!-- Tab Content -->
+    {{range $i, $phase := .PhaseOrder}}
+    <div id="results-tab-{{$i}}" class="results-tab-content {{if ne $i 0}}hidden{{end}}">
+        <div class="space-y-3">
+            {{range index $.ByPhase $phase}}
+            <form method="POST" action="/admin/results/save" class="glass-card rounded-lg p-4">
+                <input type="hidden" name="match_id" value="{{.ID}}">
+                <div class="flex flex-col sm:flex-row items-center gap-3">
+                    <div class="flex-1 text-right sm:text-right font-medium text-white">{{.HomeTeam}}</div>
+                    <div class="flex items-center gap-2">
+                        <input type="number" name="home_goals" min="0" max="20" required class="w-16 text-center rounded-xl px-2 py-1 text-lg font-bold focus:ring-2 focus:ring-emerald-500">
+                        <span class="text-slate-500 font-bold">:</span>
+                        <input type="number" name="away_goals" min="0" max="20" required class="w-16 text-center rounded-xl px-2 py-1 text-lg font-bold focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                    <div class="flex-1 text-left sm:text-left font-medium text-white">{{.AwayTeam}}</div>
+                </div>
+                <div class="flex items-center justify-between mt-2">
+                    <span class="text-xs text-slate-400">{{.Phase}}{{if .GroupName}} · {{.GroupName}}{{end}} · {{.MatchDate}}</span>
+                    <button type="submit" class="bg-emerald-600 text-white px-4 py-1 rounded text-sm hover:bg-emerald-700 transition">Ergebnis speichern</button>
+                </div>
+            </form>
+            {{end}}
+        </div>
+    </div>
+    {{end}}
+    {{else}}
+    <div class="text-center text-slate-500 py-12">Alle Spiele haben bereits ein Ergebnis.</div>
+    {{end}}
+</div>
+
+<script>
+function switchResultsTab(tabId, btn) {
+    document.querySelectorAll('.results-tab-content').forEach(el => el.classList.add('hidden'));
+    document.getElementById(tabId).classList.remove('hidden');
+    document.querySelectorAll('.results-tab-btn').forEach(b => {
+        b.classList.remove('bg-slate-700/60', 'text-white', 'border-b-2', 'border-emerald-500');
+        b.classList.add('text-slate-400', 'hover:text-slate-200', 'hover:bg-slate-700/30');
+    });
+    btn.classList.remove('text-slate-400', 'hover:text-slate-200', 'hover:bg-slate-700/30');
+    btn.classList.add('bg-slate-700/60', 'text-white', 'border-b-2', 'border-emerald-500');
+}
+
+// Remember last active tab
+document.querySelectorAll('.results-tab-btn').forEach((btn, i) => {
+    btn.addEventListener('click', function() {
+        sessionStorage.setItem('resultsActiveTab', 'results-tab-' + i);
+    });
+});
+window.addEventListener('DOMContentLoaded', function() {
+    const saved = sessionStorage.getItem('resultsActiveTab');
+    if (saved) {
+        const el = document.getElementById(saved);
+        if (el) {
+            document.querySelectorAll('.results-tab-content').forEach(t => t.classList.add('hidden'));
+            el.classList.remove('hidden');
+            const idx = parseInt(saved.replace('results-tab-', ''));
+            document.querySelectorAll('.results-tab-btn').forEach((b, i) => {
+                b.classList.remove('bg-slate-700/60', 'text-white', 'border-b-2', 'border-emerald-500');
+                b.classList.add('text-slate-400', 'hover:text-slate-200', 'hover:bg-slate-700/30');
+                if (i === idx) {
+                    b.classList.remove('text-slate-400', 'hover:text-slate-200', 'hover:bg-slate-700/30');
+                    b.classList.add('bg-slate-700/60', 'text-white', 'border-b-2', 'border-emerald-500');
+                }
+            });
+        }
+    }
+});
+</script>
+{{template "footer" .}}

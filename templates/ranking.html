@@ -1,0 +1,38 @@
+{{template "header" .}}
+<div class="fade-in">
+    <h1 class="text-2xl font-bold text-white mb-6">🏆 Tabelle</h1>
+    
+    {{if .Rankings}}
+    <div class="glass-card overflow-hidden">
+        <table class="w-full">
+            <thead class="bg-emerald-600 text-white">
+                <tr>
+                    <th class="px-4 py-3 text-left text-sm">#</th>
+                    <th class="px-4 py-3 text-left text-sm">Name</th>
+                    <th class="px-4 py-3 text-center text-sm">Punkte</th>
+                    <th class="px-4 py-3 text-center text-sm hidden sm:table-cell">3er</th>
+                    <th class="px-4 py-3 text-center text-sm hidden sm:table-cell">Diff</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Rankings}}
+                <tr class="border-b hover:opacity-50 {{if eq .Rank 1}}bg-amber-900/20{{end}}{{if eq .Rank 2}}opacity-50{{end}}{{if eq .Rank 3}}bg-orange-900/15{{end}}">
+                    <td class="px-4 py-3 font-bold text-slate-400">
+                        {{if eq .Rank 1}}🥇{{else if eq .Rank 2}}🥈{{else if eq .Rank 3}}🥉{{else}}{{.Rank}}{{end}}
+                    </td>
+                    <td class="px-4 py-3 font-medium text-white">{{.DisplayName}}</td>
+                    <td class="px-4 py-3 text-center font-bold text-emerald-600 text-lg">{{.TotalPoints}}</td>
+                    <td class="px-4 py-3 text-center text-slate-400 hidden sm:table-cell">{{.ExactScores}}</td>
+                    <td class="px-4 py-3 text-center text-slate-400 hidden sm:table-cell">{{.GoalDiffs}}</td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+    {{else}}
+    <div class="text-center text-slate-500 py-12">
+        Noch keine Ergebnisse – die Punkte werden berechnet, sobald Spiele abgeschlossen sind.
+    </div>
+    {{end}}
+</div>
+{{template "footer" .}}

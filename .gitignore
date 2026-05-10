@@ -1,0 +1,8 @@
+.env
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+/data/
+*.key
+*.pem
